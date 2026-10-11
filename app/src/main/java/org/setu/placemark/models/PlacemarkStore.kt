@@ -1,4 +1,9 @@
 package org.setu.placemark.models
 
-class PlacemarkStore {
+interface PlacemarkStore {
+    fun findAll(): List<PlacemarkModel>
+    fun create(placemark: PlacemarkModel)
+    fun update(placemark: PlacemarkModel): Boolean
+    fun delete(id: Long): Boolean
+    fun findOne(id: Long): PlacemarkModel?
 }
