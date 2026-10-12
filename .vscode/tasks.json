@@ -1,0 +1,21 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Placemark: run Lab 1 console",
+      "type": "process",
+      "command": "/bin/bash",
+      "args": ["${workspaceFolder}/scripts/run-console.sh"],
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "focus": true, "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Placemark: compile Lab 1 console",
+      "type": "process",
+      "command": "/bin/bash",
+      "args": ["${workspaceFolder}/scripts/run-console.sh", "--compile-only"],
+      "problemMatcher": []
+    }
+  ]
+}
