@@ -8,9 +8,9 @@ The published schedule puts 12-18 October in teaching Week 6, Interfaces. Assign
 
 | Checkpoint | Expected behaviour | Local position |
 | --- | --- | --- |
-| Topic 2: Kotlin Fundamentals / Lab 1 | Console CRUD and ID search, domain model, memory store, UML, Git workflow | Console compiles and seven behavioural checks passed. Model/store aligned with the lab examples. UML draft saved. Your code review and publishing workflow remain. |
-| Topic 3: Android introduction | Android project/environment and understanding the platform | Android scaffold and local Gradle files exist. A device/emulator run is still to verify. |
-| Topic 4: Activities | Main list and add/edit screens, shared data, validated coordinates and Android CRUD | Not implemented yet: no launcher activity or UI screens. |
+| Topic 2: Kotlin Fundamentals / Lab 1 | Console CRUD and ID search, domain model, memory store, UML, Git workflow | Tested and published through merged PR #2. UML saved; your own code walkthrough remains. |
+| Topic 3: Android introduction | Android project/environment and understanding the platform | Android debug APK builds and launches on the installed API 37 emulator. |
+| Topic 4: Activities | Main list and add/edit screens, shared data, validated coordinates and Android CRUD | Implemented and emulator-tested: CRUD, title/coordinate validation and cancellation. Issue #3 checkpoint ready for publishing. |
 | Topic 5: Adapters | Main menu, dedicated list screen, RecyclerView/adapter and XML layouts | Not implemented yet. This is the core lab target for Assignment 1 preparation. |
 | Topic 6: Interfaces | Item listener, tap to edit, confirmed long-press delete, Timber logging | Not implemented yet. This is the current teaching-week target. |
 
@@ -58,12 +58,23 @@ VS Code can edit the Kotlin/XML and run this console. The Adapters lab explicitl
 ## Remaining handoffs
 
 - Review and understand the Lab 1 code before moving to the Android screens.
-- The repository uses your configured Git author and the existing `feature/issue-1-lab1-setup` branch, linked to the actual GitHub Issue #1. Local commits group the project setup, the lab implementation and the VS Code support files. Check the commit history and code before publishing.
-- Push and the tutor's Pull Request/merge step remain for publishing the reviewed checkpoint.
-- Build Topic 4 Activities next, then Topic 5 RecyclerView and layouts, then Topic 6 listener/logging refactor.
+- Lab 1 was committed on its Issue #1 branch, pushed and merged in [PR #2](https://github.com/Peterk04/placemark-android/pull/2). Each next checkpoint gets a new issue/branch and is committed/pushed only after its checks pass.
+- Activities uses `codex/issue-3-activities`, linked to [Issue #3](https://github.com/Peterk04/placemark-android/issues/3). Its emulator report has four passing tests, including three behaviour checks and the generated app-context check.
+- Build Topic 5 RecyclerView and layouts next, then Topic 6 listener/logging refactor.
 - For Assignment 1, choose your own original app idea, rewrite written sections, review all code and record your demo. Finishing the Placemark lab does not by itself satisfy the original-app assignment.
 
 Agent assistance in this checkpoint covered lab comparison, completing console functions, correcting mixed example names, VS Code run support and verification. Use this record when preparing the module's required AI-use disclosure.
+
+## Activities walkthrough
+
+- `AppData` owns a shared `PlacemarkMemStore` so both Android screens use the same records.
+- `MainActivity` builds the first UI in Kotlin, as the Activities lab does, and refreshes its list in `onResume()` after returning from the form.
+- `AddEditActivity` reads an optional mark ID from its Intent. Without one it creates a mark; with one it loads and updates that record.
+- A blank title or invalid/non-finite coordinate keeps the form open without saving. Cancel returns without changing the store. Negative decimal coordinates are accepted.
+- These Android screens still use memory only. They do not provide JSON/file persistence or the original Assignment 1 app.
+- The project's generated Espresso/JUnit Android test versions were updated to 3.7.0/1.3.0 because the older Espresso version could not inject input on API 37. The app's test checks now execute on that emulator.
+
+Be ready to explain `onCreate`, `onResume`, Intent extras, the singleton store, view IDs and why validation runs before create/update. Compare the programme-generated views with the XML views in the next lab.
 
 ## Tutors references
 
