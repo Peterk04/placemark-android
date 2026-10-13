@@ -6,7 +6,6 @@
     <string name="delete_mark">Delete</string>
     <string name="save_mark">Save</string>
     <string name="cancel">Cancel</string>
-    <string name="no_marks">No placed marks yet.</string>
     <string name="title_hint">Title</string>
     <string name="description_hint">Description</string>
     <string name="x_hint">X coordinate</string>
@@ -17,4 +16,6 @@
     <string name="mark_not_found">Mark not found</string>
     <string name="mark_created">Mark created</string>
     <string name="mark_updated">Mark updated</string>
+    <string name="view_marks">View Marks</string>
+    <string name="back_to_menu">Back to menu</string>
 </resources>

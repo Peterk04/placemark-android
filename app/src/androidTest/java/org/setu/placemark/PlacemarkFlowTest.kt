@@ -42,6 +42,7 @@ class PlacemarkFlowTest {
         onView(withId(R.id.addMarkButton)).perform(click())
         fillForm("Home", "My home location", "10.5", "-20.3")
         onView(withId(R.id.saveButton)).perform(scrollTo(), click())
+        onView(withId(R.id.viewMarksButton)).perform(click())
         onView(withText(endsWith(": Home"))).check(matches(isDisplayed()))
 
         onView(withId(R.id.editButton)).perform(scrollTo(), click())
@@ -55,7 +56,6 @@ class PlacemarkFlowTest {
         assertEquals(42.0, mark.y, 0.0)
 
         onView(withId(R.id.deleteButton)).perform(scrollTo(), click())
-        onView(withText(R.string.no_marks)).check(matches(isDisplayed()))
         assertEquals(0, AppData.placedMarks.findAll().size)
     }
 
@@ -79,8 +79,10 @@ class PlacemarkFlowTest {
         onView(withId(R.id.addMarkButton)).perform(click())
         fillForm("Cancelled", "Not saved", "1", "2")
         onView(withId(R.id.cancelButton)).perform(scrollTo(), click())
-        onView(withText(R.string.no_marks)).check(matches(isDisplayed()))
+        onView(withId(R.id.viewMarksButton)).perform(click())
         assertEquals(0, AppData.placedMarks.findAll().size)
+        onView(withId(R.id.returnButton)).perform(click())
+        onView(withId(R.id.addMarkButton)).check(matches(isDisplayed()))
     }
 
     private fun fillForm(title: String, description: String, x: String, y: String) {
