@@ -1,6 +1,5 @@
 <resources>
     <item name="addMarkButton" type="id" />
-    <item name="marksContainer" type="id" />
     <item name="editButton" type="id" />
     <item name="deleteButton" type="id" />
     <item name="formTitle" type="id" />

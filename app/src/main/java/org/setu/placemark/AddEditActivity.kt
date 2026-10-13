@@ -1,11 +1,8 @@
 package org.setu.placemark
 
 import android.os.Bundle
-import android.text.InputType
 import android.widget.Button
 import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -26,47 +23,16 @@ class AddEditActivity : AppCompatActivity() {
     }
 
     private fun createUserInterface() {
-        val root = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(32, 320, 32, 32)
-        }
-        root.addView(TextView(this).apply {
-            id = R.id.formTitle
-            text = getString(if (editingId == null) R.string.add_mark else R.string.edit_mark)
-            textSize = 28f
-        })
-        titleInput = EditText(this).apply {
-            id = R.id.titleInput
-            hint = getString(R.string.title_hint)
-        }
-        descriptionInput = EditText(this).apply {
-            id = R.id.descriptionInput
-            hint = getString(R.string.description_hint)
-        }
-        xInput = coordinateInput(R.id.xInput, R.string.x_hint)
-        yInput = coordinateInput(R.id.yInput, R.string.y_hint)
-        root.addView(titleInput)
-        root.addView(descriptionInput)
-        root.addView(xInput)
-        root.addView(yInput)
-        root.addView(Button(this).apply {
-            id = R.id.saveButton
-            text = getString(R.string.save_mark)
-            setOnClickListener { saveMark() }
-        })
-        root.addView(Button(this).apply {
-            id = R.id.cancelButton
-            text = getString(R.string.cancel)
-            setOnClickListener { finish() }
-        })
-        setContentView(ScrollView(this).apply { addView(root) })
-    }
-
-    private fun coordinateInput(viewId: Int, hintId: Int) = EditText(this).apply {
-        id = viewId
-        hint = getString(hintId)
-        inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL or
-            InputType.TYPE_NUMBER_FLAG_SIGNED
+        setContentView(R.layout.activity_add_edit)
+        titleInput = findViewById(R.id.titleInput)
+        descriptionInput = findViewById(R.id.descriptionInput)
+        xInput = findViewById(R.id.xInput)
+        yInput = findViewById(R.id.yInput)
+        findViewById<TextView>(R.id.formTitle).setText(
+            if (editingId == null) R.string.add_mark else R.string.edit_mark
+        )
+        findViewById<Button>(R.id.saveButton).setOnClickListener { saveMark() }
+        findViewById<Button>(R.id.cancelButton).setOnClickListener { finish() }
     }
 
     private fun loadExistingMark(id: Long) {
