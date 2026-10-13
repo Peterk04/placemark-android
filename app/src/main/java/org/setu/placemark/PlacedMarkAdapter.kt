@@ -3,22 +3,19 @@ package org.setu.placemark
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import org.setu.placemark.models.PlacemarkModel
+import timber.log.Timber
 
 class PlacedMarkAdapter(
     private var marks: List<PlacemarkModel>,
-    private val onEdit: (PlacemarkModel) -> Unit,
-    private val onDelete: (PlacemarkModel) -> Unit
+    private val listener: OnMarkListener
 ) : RecyclerView.Adapter<PlacedMarkAdapter.MarkViewHolder>() {
     class MarkViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleText: TextView = itemView.findViewById(R.id.titleText)
         val descriptionText: TextView = itemView.findViewById(R.id.descriptionText)
         val coordinatesText: TextView = itemView.findViewById(R.id.coordinatesText)
-        val editButton: Button = itemView.findViewById(R.id.editButton)
-        val deleteButton: Button = itemView.findViewById(R.id.deleteButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MarkViewHolder {
@@ -34,8 +31,14 @@ class PlacedMarkAdapter(
         holder.coordinatesText.text = holder.itemView.context.getString(
             R.string.coordinates, mark.x, mark.y
         )
-        holder.editButton.setOnClickListener { onEdit(mark) }
-        holder.deleteButton.setOnClickListener { onDelete(mark) }
+        holder.itemView.setOnClickListener {
+            Timber.d("Mark item clicked: id=%d", mark.id)
+            listener.onMarkClick(mark)
+        }
+        holder.itemView.setOnLongClickListener {
+            Timber.d("Mark item long-pressed: id=%d", mark.id)
+            listener.onMarkLongClick(mark)
+        }
     }
 
     override fun getItemCount(): Int = marks.size

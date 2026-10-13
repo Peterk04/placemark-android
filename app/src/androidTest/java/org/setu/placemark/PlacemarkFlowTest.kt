@@ -4,6 +4,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.longClick
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -45,7 +46,7 @@ class PlacemarkFlowTest {
         onView(withId(R.id.viewMarksButton)).perform(click())
         onView(withText(endsWith(": Home"))).check(matches(isDisplayed()))
 
-        onView(withId(R.id.editButton)).perform(scrollTo(), click())
+        onView(withId(R.id.markItemRoot)).perform(scrollTo(), click())
         onView(withId(R.id.titleInput)).check(matches(withText("Home")))
         onView(withId(R.id.yInput)).check(matches(withText("-20.3")))
         fillForm("My Home", "Updated description", "-3.2", "42.0")
@@ -55,7 +56,12 @@ class PlacemarkFlowTest {
         assertEquals(-3.2, mark.x, 0.0)
         assertEquals(42.0, mark.y, 0.0)
 
-        onView(withId(R.id.deleteButton)).perform(scrollTo(), click())
+        onView(withId(R.id.markItemRoot)).perform(scrollTo(), longClick())
+        onView(withText(R.string.delete_mark_confirm)).check(matches(isDisplayed()))
+        onView(withText(R.string.cancel)).perform(click())
+        assertEquals(1, AppData.placedMarks.findAll().size)
+        onView(withId(R.id.markItemRoot)).perform(scrollTo(), longClick())
+        onView(withText(R.string.delete_mark)).perform(click())
         assertEquals(0, AppData.placedMarks.findAll().size)
     }
 

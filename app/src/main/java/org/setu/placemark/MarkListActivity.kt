@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.setu.placemark.models.PlacemarkModel
+import timber.log.Timber
 
 class MarkListActivity : AppCompatActivity() {
     private lateinit var adapter: PlacedMarkAdapter
@@ -16,8 +17,14 @@ class MarkListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_mark_list)
         adapter = PlacedMarkAdapter(
             marks = AppData.placedMarks.findAll(),
-            onEdit = { editMark(it) },
-            onDelete = { deleteMark(it) }
+            listener = object : OnMarkListener {
+                override fun onMarkClick(mark: PlacemarkModel) = editMark(mark)
+
+                override fun onMarkLongClick(mark: PlacemarkModel): Boolean {
+                    confirmDelete(mark)
+                    return true
+                }
+            }
         )
         findViewById<RecyclerView>(R.id.marksRecyclerView).apply {
             layoutManager = LinearLayoutManager(this@MarkListActivity)
@@ -34,18 +41,27 @@ class MarkListActivity : AppCompatActivity() {
     }
 
     private fun editMark(mark: PlacemarkModel) {
+        Timber.d("Editing mark id=%d", mark.id)
         startActivity(Intent(this, AddEditActivity::class.java).apply {
             putExtra(AddEditActivity.EXTRA_MARK_ID, mark.id)
         })
     }
 
-    private fun deleteMark(mark: PlacemarkModel) {
-        AppData.placedMarks.delete(mark.id)
-        refreshMarks()
+    private fun confirmDelete(mark: PlacemarkModel) {
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle(R.string.delete_mark_confirm)
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.delete_mark) { _, _ ->
+                AppData.placedMarks.delete(mark.id)
+                Timber.d("Deleted mark id=%d", mark.id)
+                refreshMarks()
+            }
+            .show()
     }
 
     private fun refreshMarks() {
         val marks = AppData.placedMarks.findAll()
+        Timber.d("Loaded %d marks", marks.size)
         adapter.updateMarks(marks)
     }
 }

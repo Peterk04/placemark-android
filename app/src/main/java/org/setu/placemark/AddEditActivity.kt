@@ -7,6 +7,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import org.setu.placemark.models.PlacemarkModel
+import timber.log.Timber
 
 class AddEditActivity : AppCompatActivity() {
     private lateinit var titleInput: EditText
@@ -32,12 +33,16 @@ class AddEditActivity : AppCompatActivity() {
             if (editingId == null) R.string.add_mark else R.string.edit_mark
         )
         findViewById<Button>(R.id.saveButton).setOnClickListener { saveMark() }
-        findViewById<Button>(R.id.cancelButton).setOnClickListener { finish() }
+        findViewById<Button>(R.id.cancelButton).setOnClickListener {
+            Timber.d("Cancelled mark form")
+            finish()
+        }
     }
 
     private fun loadExistingMark(id: Long) {
         val mark = AppData.placedMarks.findOne(id)
         if (mark == null) {
+            Timber.w("Mark id=%d not found while editing", id)
             Toast.makeText(this, R.string.mark_not_found, Toast.LENGTH_SHORT).show()
             finish()
             return
@@ -73,12 +78,15 @@ class AddEditActivity : AppCompatActivity() {
         )
         if (editingId == null) {
             AppData.placedMarks.create(mark)
+            Timber.d("Created mark id=%d", mark.id)
             Toast.makeText(this, R.string.mark_created, Toast.LENGTH_SHORT).show()
         } else {
             if (!AppData.placedMarks.update(mark)) {
+                Timber.w("Mark id=%d not found during update", mark.id)
                 Toast.makeText(this, R.string.mark_not_found, Toast.LENGTH_SHORT).show()
                 return
             }
+            Timber.d("Updated mark id=%d", mark.id)
             Toast.makeText(this, R.string.mark_updated, Toast.LENGTH_SHORT).show()
         }
         finish()
